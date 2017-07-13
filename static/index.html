@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="formCtrl">
+  <form novalidate>
+    First Name:<br>
+    <input type="text" ng-model="user.firstName"><br>
+    Last Name:<br>
+    <input type="text" ng-model="user.lastName">
+    <br><br>
+    <label>CheckeAnswer:
+      <input type="checkbox" ng-model="checkboxModel.checkbox">
+    </label><br/>
+    <br><br>
+    <select ng-model="selectedName" ng-options="x for x in names"></select>
+    <button ng-click="submitForm()">Submit</button>
+    <br><br>
+  </form>
+<br>
+    Result: {{ result }} <br>
+    Error: {{ error }} <br>
+    Status: {{ status }} <br>
+    ------------
+<br>
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller(
+    'formCtrl', function($scope, $http) {
+        $scope.names = ["Home", "Job", "Self"];
+    
+        $scope.submitForm = function () {
+            var requestContent = {"ranktype": "Awesome","userid": "kelcey","answerchecked": 1}
+            $http({
+                method: 'POST',
+                url: '/meiva/api/rankfiler/new',
+                data: requestContent,
+                header: {
+                    "Content-Type": "application/json"
+                }
+            }).then(function (success) {
+              $scope.result = success.data;
+           }, function (error) {
+              $scope.error = error.data.message;
+           });
+        }
+    }
+);
+</script>
+
+</body>
+</html>
