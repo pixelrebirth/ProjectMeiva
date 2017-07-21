@@ -53,18 +53,22 @@ class RankFilerNew(Resource):
         json = request.json
         print(json)
 
-        checked =json['answerchecked']
-        if checked == "1":
-            points = 1
-        else:
-            points = 0
-        
+        points = 0
+        answered = []
+        checked = json['answerchecked']
+        keys_in_json = list(checked.keys())
+        for key in keys_in_json:
+            points += int(checked[key])
+            if points == 1:
+                answered += key
+
+        seperator = ':'
         data = {
             "Type": "rankfiler",
             "UserId":json['userid'],
             "PointsEarned": points,
             "RankType":json['ranktype'],
-            "Answers": checked
+            "Answers": seperator.join(answered)
         }
         uid = GetUniqueTimeStamp()
         ack = es.index(index='meiva_index', doc_type='post', id=uid ,body=data)

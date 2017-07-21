@@ -1,48 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-<body>
+<html>
+<head>
 
-<div ng-app="myApp" ng-controller="formCtrl">
-  <form novalidate>
-    Username:<br>
-    <input type="text" ng-model="username"><br>
+    <!-- CSS -->
+    <!-- load up bootstrap and add some spacing -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <style>
+        body         { padding-top:50px; }
+        form, pre    { margin-bottom:50px; }
+    </style>
 
-    <br>
-    <label ng-repeat="question in questions">
-        <input type="checkbox" ng-checked="isChecked(question)">{{ question }}<br>
-    </label><br/>
-    <br>
-    <select ng-model="selectedName" ng-options="Rank for Rank in RankType"></select>
-    <button ng-click="submitForm()">Submit</button>
-    <br><br>
-  </form>
-<br>
-------------<br>
-Result: {{ result }} <br>
-Error: {{ error }} <br>
-Status: {{ status }} <br>
-------------<br>
+    <!-- JS -->
+    <!-- load up angular and our custom script -->
+    <script src="http://code.angularjs.org/1.2.13/angular.js"></script>
+    <script src="js/app.js"></script>
+</head>
+
+<!-- apply our angular app and controller -->
+<body ng-app="formApp" ng-controller="formController">
+<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+
+    <h2>Angular Checkboxes and Radio Buttons</h2>
+
+    <form>
+    
+        <!-- NAME INPUT -->
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" class="form-control" name="name" ng-model="formData.name">
+        </div>
+        
+        <!-- MULTIPLE CHECKBOXES -->
+        <label>Favorite Colors</label>
+        <div class="form-group">
+            <label class="checkbox">
+                <input type="checkbox" ng-model="formData.colors.red"  ng-true-value="1" ng-false-value="0"> Red
+            </label>
+            <label class="checkbox">
+                <input type="checkbox" ng-model="formData.colors.blue"  ng-true-value="1" ng-false-value="0"> Blue
+            </label>
+            <label class="checkbox">
+                <input type="checkbox" ng-model="formData.colors.green"  ng-true-value="1" ng-false-value="0"> Green
+            </label>
+        </div>
+        
+        <!-- CUSTOM VALUE CHECKBOXES -->
+        <label>Personal Question</label>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="awesome" ng-model="formData.awesome" ng-true-value="1" ng-false-value="0">
+                Are you awesome?
+            </label>
+        </div>
+        
+        <!-- RADIO BUTTONS -->
+        <label>Chicken or the Egg?</label>
+        <div class="form-group">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="chickenEgg" value="chicken" ng-model="formData.chickenEgg">
+                    Chicken
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="chickenEgg" value="egg" ng-model="formData.chickenEgg">
+                    Egg
+                </label>
+            </div>
+        </div>
+        
+        <button ng-click="submitForm()" class="btn btn-danger btn-lg">Send Away!</button>
+        
+    </form>
+    
+    <!-- SHOW OFF OUR FORMDATA OBJECT -->
+    <h2>Sample Form Object</h2>
+    <pre>
+        {{ formData }}<br>
+        ------------<br>
+        Result: {{ result }} <br>
+        Error: {{ error }} <br>
+        Status: {{ status }} <br>
+        ------------<br>
+    </pre>
+    
 </div>
 
 <script>
-var app = angular.module('myApp', [])
-app.controller(
-    'formCtrl', function($scope, $http) {
-        $scope.questions = [
-            'Question 1', 
-            'Question 2', 
-            'Question 3', 
-            'Question 4'
-        ]
-        $scope.RankType = ["AwesomeHome", "AwesomeJob", "AwesomeSelf"]
+    var formApp = angular.module('formApp', [])
+
+    .controller('formController', function($scope, $http) {
+        $scope.formData = {};
         
         $scope.submitForm = function () {
             var requestContent = {}
 
-            requestContent['userid'] = $scope.username
-            requestContent['ranktype'] = $scope.selectedName
-            requestContent['answerchecked'] = 1
+            requestContent['userid'] = $scope.formData['name']
+            requestContent['ranktype'] = "test"
+            requestContent['answerchecked'] = $scope.formData['colors']
 
             $http({
                 method: 'POST',
@@ -59,9 +115,7 @@ app.controller(
                 $scope.error = error.data.message
             })
         }
-    }
-)
+    });
 </script>
-
 </body>
 </html>
