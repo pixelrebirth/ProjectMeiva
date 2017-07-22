@@ -1,0 +1,48 @@
+
+from elasticsearch import Elasticsearch
+es = Elasticsearch(['192.168.1.222:9200'])
+
+es.index(index='test_index', doc_type='post', id=99, body={
+  'author': 'Test1',
+  'blog': 'LElasticsearch',
+  'type': 'Using Python with Elasticsearch',
+  'tags': ['python', 'elasticsearch', 'tips'],
+  'questions': {
+      'test': 'things',
+      'other': 'stuff'
+  }
+})
+
+es.search(index='rankfiler_question_index', body={
+  'query': {
+    'match': {
+      'category': 'Home',
+     }
+  }
+})
+
+questions = es.search(index='rankfiler_question_index', body={
+  "from" : 0, "size" : 100,
+  'query': {
+    'match_all':{}
+  }
+})
+
+allcategories = []
+for category in questions['hits']['hits']:
+    allcategories += {(category['_source']['category'])}
+uniquecategories = list(set(allcategories))
+
+
+from elasticsearch import Elasticsearch
+es = Elasticsearch(['192.168.1.222:9200'])
+id = 0
+
+for category in content:
+  category_name = category['name']
+  for question in category['questions']:  
+    es.index(index='rankfiler_question_index', doc_type='post', id=id, body={
+      'category': category_name,
+      'question': question
+    })
+    id += 1
