@@ -14,6 +14,9 @@ api = Api(app)
 def GetUniqueTimeStamp ():
     return int(time.time() * 10000000000)
 
+
+
+
 def GetPointsByCategory(category):
     case = {
         "Coding": 1,
@@ -73,6 +76,35 @@ class RankFilerNew(Resource):
         uid = GetUniqueTimeStamp()
         ack = es.index(index='meiva_index', doc_type='post', id=uid ,body=data)
         return ack
+class GetQuestions (Resource):
+    def post(self):
+        json = request.json
+        category = json['category']
+        print(json)
+
+        question = es.search(index='rankfiler_question_index', body={
+            "from" : 0, "size" : 100,
+            'query': {
+                "query_string" : {
+                    "default_field" : "category",
+                    "query" : category.replace(" "," AND ")
+                }
+            }
+        })
+        return question['hits']['hits']
+class GetCategories (Resource):
+    def post(self):
+        questions = es.search(index='rankfiler_question_index', body={
+        "from" : 0, "size" : 100,
+        'query': {
+            'match_all':{}
+        }
+        })
+
+        allcategories = []
+        for category in questions['hits']['hits']:
+            allcategories += {(category['_source']['category'])}
+        return list(set(allcategories))
 
         
 @app.route('/')
@@ -81,6 +113,8 @@ def root():
 
 api.add_resource(TimeKeeperNew, '/meiva/api/timekeeper/new')
 api.add_resource(RankFilerNew, '/meiva/api/rankfiler/new')
+api.add_resource(GetCategories, '/meiva/api/rankfiler/get/categories')
+api.add_resource(GetQuestions, '/meiva/api/rankfiler/get/questions')
 
 if __name__ == '__main__':
     app.run(host= '0.0.0.0',debug=True)
