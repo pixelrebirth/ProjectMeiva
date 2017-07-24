@@ -100,7 +100,7 @@ content = [
         ]
     },
     {
-        'name':  "Fire Element (Emotion)",
+        'name':  "Element Fire (Emotion)",
         'questions': [
             "Excited",
             "Funny",
@@ -109,7 +109,7 @@ content = [
         ]
     },
     {
-        'name':  "Earth Element (Health)",
+        'name':  "Element Earth (Health)",
         'questions': [
             "Eat great food",
             "Workout",
@@ -118,7 +118,7 @@ content = [
         ]
     },
     {
-        'name':  "Metal Element (ACT)",
+        'name':  "Element Metal (ACT)",
         'questions': [
             "Defusing unhelpful thoughts",
             "Adding energy to values",
@@ -127,7 +127,7 @@ content = [
         ]
     },
     {
-        'name':  "Water Element (Intellect)",
+        'name':  "Element Water (Intellect)",
         'questions': [
             "Speak intelligently",
             "Find new things to learn",
@@ -136,7 +136,7 @@ content = [
         ]
     },
     {
-        'name':  "Air Element (Social)",
+        'name':  "Element Air (Social)",
         'questions': [
             "Contribute to social networks",
             "Learn about and remember people",

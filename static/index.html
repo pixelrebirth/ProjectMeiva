@@ -13,7 +13,6 @@
     <!-- JS -->
     <!-- load up angular and our custom script -->
     <script src="http://code.angularjs.org/1.2.13/angular.js"></script>
-    <script src="js/app.js"></script>
 </head>
 
 <!-- apply our angular app and controller -->
@@ -26,50 +25,23 @@
     
         <!-- NAME INPUT -->
         <div class="form-group">
-            <label>Name</label>
+            <label>UserName</label>
             <input type="text" class="form-control" name="name" ng-model="formData.name">
         </div>
         
         <!-- MULTIPLE CHECKBOXES -->
-        <label>Favorite Colors</label>
-        <div class="form-group">
-            <label class="checkbox">
-                <input type="checkbox" ng-model="formData.colors.red"  ng-true-value="1" ng-false-value="0"> Red
-            </label>
-            <label class="checkbox">
-                <input type="checkbox" ng-model="formData.colors.blue"  ng-true-value="1" ng-false-value="0"> Blue
-            </label>
-            <label class="checkbox">
-                <input type="checkbox" ng-model="formData.colors.green"  ng-true-value="1" ng-false-value="0"> Green
-            </label>
-        </div>
-        
-        <!-- CUSTOM VALUE CHECKBOXES -->
-        <label>Personal Question</label>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" name="awesome" ng-model="formData.awesome" ng-true-value="1" ng-false-value="0">
-                Are you awesome?
-            </label>
-        </div>
-        
-        <!-- RADIO BUTTONS -->
-        <label>Chicken or the Egg?</label>
-        <div class="form-group">
-            <div class="radio">
-                <label>
-                    <input type="radio" name="chickenEgg" value="chicken" ng-model="formData.chickenEgg">
-                    Chicken
+        <div class="form-group" ng-repeat="category in categories">
+            <label>{{category}}</label>
+            <!-- {{ findQuestions(category) }}  -->
+            <!-- <div class="form-group" ng-repeat="question in questions._source.question">
+                <label>{{question}}</label>
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="formData.colors.{{question}}"  ng-true-value="1" ng-false-value="0"> {{question}}
                 </label>
-            </div>
-            <div class="radio">
-                <label>
-                    <input type="radio" name="chickenEgg" value="egg" ng-model="formData.chickenEgg">
-                    Egg
-                </label>
-            </div>
+            </div> -->
         </div>
         
+        <br>
         <button ng-click="submitForm()" class="btn btn-danger btn-lg">Send Away!</button>
         
     </form>
@@ -79,7 +51,6 @@
     <pre>
         {{ formData }}<br>
         ------------<br>
-        Populate: {{ categories }} <br>
         Result: {{ result }} <br>
         Error: {{ error }} <br>
         Status: {{ status }} <br>
@@ -109,7 +80,9 @@
         }
 
         $scope.findQuestions = function (category) {
-            requestRequest['category'] = category
+            var requestContent = {}
+
+            requestContent['category'] = category
 
             $http({
                 method: 'POST',

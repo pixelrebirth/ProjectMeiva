@@ -34,6 +34,7 @@ for category in questions['hits']['hits']:
 uniquecategories = list(set(allcategories))
 
 
+# push in list of awesome categories w/ questions
 from elasticsearch import Elasticsearch
 es = Elasticsearch(['192.168.1.222:9200'])
 id = 0

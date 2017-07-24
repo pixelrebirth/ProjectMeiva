@@ -14,9 +14,6 @@ api = Api(app)
 def GetUniqueTimeStamp ():
     return int(time.time() * 10000000000)
 
-
-
-
 def GetPointsByCategory(category):
     case = {
         "Coding": 1,
@@ -94,6 +91,7 @@ class GetQuestions (Resource):
         return question['hits']['hits']
 class GetCategories (Resource):
     def post(self):
+        
         questions = es.search(index='rankfiler_question_index', body={
         "from" : 0, "size" : 100,
         'query': {
@@ -104,7 +102,9 @@ class GetCategories (Resource):
         allcategories = []
         for category in questions['hits']['hits']:
             allcategories += {(category['_source']['category'])}
-        return list(set(allcategories))
+        listSet = list(set(allcategories))
+        listSet.sort()
+        return listSet
 
         
 @app.route('/')
