@@ -43,7 +43,6 @@ for category in content:
   category_name = category['name']
   for question in category['questions']:  
     es.index(index='rankfiler_question_index', doc_type='post', id=id, body={
-      'category': category_name,
-      'question': question
+      category_name: question
     })
     id += 1

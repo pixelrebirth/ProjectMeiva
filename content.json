@@ -1,7 +1,7 @@
-content = [
+[
     {
-        'name':  "Awesome Home",
-        'questions': [
+        "name":  "Awesome Home",
+        "questions": [
             "Clean a room entirely",
             "Sort out giveaways",
             "Organize an area",
@@ -10,8 +10,8 @@ content = [
         ]
     },
     {
-        'name':  "Awesome Health",
-        'questions': [
+        "name":  "Awesome Health",
+        "questions": [
             "Eating healthy meals",
             "Eating healthy snacks",
             "Encourage others to be healthy",
@@ -20,8 +20,8 @@ content = [
         ]
     },
     {
-        'name':  "Awesome Look",
-        'questions': [
+        "name":  "Awesome Look",
+        "questions": [
             "Cardio",
             "Lift weights",
             "Do stretches often",
@@ -30,8 +30,8 @@ content = [
         ]
     },
     {
-        'name':  "Awesome Kids",
-        'questions': [
+        "name":  "Awesome Kids",
+        "questions": [
             "Play with each child",
             "Create ways to play together",
             "Teach them new things",
@@ -40,8 +40,8 @@ content = [
         ]
     },
     {
-        'name':  "Awesome Productivity",
-        'questions': [
+        "name":  "Awesome Productivity",
+        "questions": [
             "Add goals",
             "Complete goals",
             "Set deadlines/commitments",
@@ -50,8 +50,8 @@ content = [
         ]
     },
     {
-        'name':  "Awesome Creativity",
-        'questions': [
+        "name":  "Awesome Creativity",
+        "questions": [
             "DND writing",
             "Code projects",
             "Photography/Digital Art",
@@ -60,8 +60,8 @@ content = [
         ]
     },
     {
-        'name':  "Awesome Job",
-        'questions': [
+        "name":  "Awesome Job",
+        "questions": [
             "Learn something new for work",
             "Check in with project tool",
             "Plan constructive future work",
@@ -70,8 +70,8 @@ content = [
         ]
     },
     {
-        'name':  "Awesome Self",
-        'questions': [
+        "name":  "Awesome Self",
+        "questions": [
             "Choose only positive people to associate with",
             "Say affirmations",
             "Name something you are proud of today",
@@ -80,8 +80,8 @@ content = [
         ]
     },
     {
-        'name':  "Awesome Socially",
-        'questions': [
+        "name":  "Awesome Socially",
+        "questions": [
             "Demonstrate interest in others",
             "Talk to strangers",
             "Find out what others are doing on facebook",
@@ -90,8 +90,8 @@ content = [
         ]
     },
     {
-        'name':  "Awesome Persistence",
-        'questions': [
+        "name":  "Awesome Persistence",
+        "questions": [
             "Play an instrument",
             "Master speech",
             "Discover what feels impossible",
@@ -100,8 +100,8 @@ content = [
         ]
     },
     {
-        'name':  "Element Fire (Emotion)",
-        'questions': [
+        "name":  "Element Fire (Emotion)",
+        "questions": [
             "Excited",
             "Funny",
             "Upbeat/Proud",
@@ -109,8 +109,8 @@ content = [
         ]
     },
     {
-        'name':  "Element Earth (Health)",
-        'questions': [
+        "name":  "Element Earth (Health)",
+        "questions": [
             "Eat great food",
             "Workout",
             "Good hygiene",
@@ -118,8 +118,8 @@ content = [
         ]
     },
     {
-        'name':  "Element Metal (ACT)",
-        'questions': [
+        "name":  "Element Metal (ACT)",
+        "questions": [
             "Defusing unhelpful thoughts",
             "Adding energy to values",
             "Define values and beliefs",
@@ -127,8 +127,8 @@ content = [
         ]
     },
     {
-        'name':  "Element Water (Intellect)",
-        'questions': [
+        "name":  "Element Water (Intellect)",
+        "questions": [
             "Speak intelligently",
             "Find new things to learn",
             "Strive to resolve problems",
@@ -136,8 +136,8 @@ content = [
         ]
     },
     {
-        'name':  "Element Air (Social)",
-        'questions': [
+        "name":  "Element Air (Social)",
+        "questions": [
             "Contribute to social networks",
             "Learn about and remember people",
             "Be interested in what others like",
@@ -145,31 +145,3 @@ content = [
         ]
     }
 ]
-
-from elasticsearch import Elasticsearch
-es = Elasticsearch(['192.168.1.222:9200'])
-id = 0
-
-for category in content:
-  category_name = category['name']
-  for question in category['questions']:  
-    es.index(index='rankfiler_question_index', doc_type='post', id=id, body={
-      'category': category_name,
-      'question': question
-    })
-    id += 1
-
-
-Struggle Switch Off?",
-    },
-TimeKeeper Categories",
-            "Positive_Talk:1",
-            "Negative_Talk:-1",
-            "Time_Killing:0",
-            "Coding:1",
-            "Architecting:1",
-            "Creating:1",
-            "Gaming:0",
-            "Learning:1",
-            "Anxious:0",
-    },

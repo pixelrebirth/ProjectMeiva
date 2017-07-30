@@ -1,0 +1,61 @@
+Pull questions from a single source and iterate by category
+
+
+content = [
+    {
+        'name': 'Awesome Home',
+        'questions': [
+            "Clean a room entirely",
+            "Sort out giveaways",
+            "Organize an area",
+            "Do your chores",
+            "Fix something broken"
+        ]
+    },
+    {
+        'name': 'Awesome Home',
+        'questions': [
+            "Clean a room entirely",
+            "Sort out giveaways",
+            "Organize an area",
+            "Do your chores",
+            "Fix something broken"
+        ]
+    }
+]
+
+content['category']['Awesome Home'][0]
+
+
+    {
+        'name': 'Awesome Home',
+        'questions': [
+            "Clean a room entirely",
+            "Sort out giveaways",
+            "Organize an area",
+            "Do your chores",
+            "Fix something broken"
+        ]
+    },
+    {
+        'name': 'Awesome Health',
+        'questions': [
+            "Eating healthy meals",
+            "Eating healthy snacks",
+            "Encourage others to be healthy",
+            "Great sleep",
+            "Proper hygiene"
+        ]
+    },
+
+questions = es.search(index='rankfiler_question_index', body={
+  "from" : 0, "size" : 100,
+  'query': {
+    'match_all':{}
+  }
+})
+
+allcategories = []
+for category in questions['hits']['hits']:
+    allcategories += {(category['_source']['category'])}
+uniquecategories = list(set(allcategories))
