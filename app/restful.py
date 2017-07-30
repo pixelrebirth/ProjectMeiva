@@ -2,9 +2,8 @@ import time
 import os
 
 from elasticsearch import Elasticsearch
-from flask import Flask, request, render_template
 from flask_restful import Resource, Api
-from app import app
+from flask import request
 
 esserver = ['192.168.1.222:9200']
 
@@ -122,6 +121,3 @@ api.add_resource(RankFilerNew, '/meiva/api/rankfiler/new')
 api.add_resource(GetCategories, '/meiva/api/rankfiler/get/categories')
 api.add_resource(GetQuestions, '/meiva/api/rankfiler/get/questions')
 api.add_resource(GetQuestionsByCategory, '/meiva/api/rankfiler/get/questionByCategory')
-
-if __name__ == '__main__':
-    app.run(host= '0.0.0.0',debug=True)
