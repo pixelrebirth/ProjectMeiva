@@ -1,11 +1,15 @@
+from flask import Flask, request, render_template
 from app import app
-from flask import render_template
+import requests
 
 @app.route('/')
 @app.route('/index')
 def index():
-    categories = [{'name': 'thing', 'stuff': 'mabob'},{'name': 'thing2', 'stuff': 'mabob2'}]
+    questions = requests.get('http://127.0.0.1:5000/meiva/api/rankfiler/get/questions')
+    categories = requests.get('http://127.0.0.1:5000/meiva/api/rankfiler/get/categories')
+
     return render_template('index.html',
-                           title='Home',
-                           categories = categories
+                           title='Project Meiva',
+                           questions = questions.json(),
+                           categories = categories.json()
     )

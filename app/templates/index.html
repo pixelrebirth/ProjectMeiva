@@ -32,12 +32,12 @@
         <!-- MULTIPLE CHECKBOXES -->
         <div class="form-group">
             {% for category in categories %}
-                <label>{{category.name}}</label>
+                <label>{{category}}</label>
                 <div class="form-group">
-                        {% for question in categories %}
-                        {% if category.name == question.name %}
+                        {% for question in questions %}
+                        {% if category == question._source.category %}
                         <label class="checkbox">
-                            <input type="checkbox" ng-model="formData.questions.{{ question.stuff }}"  ng-true-value="1" ng-false-value="0">{{ question.stuff }}
+                            <input type="checkbox" ng-model="formData.questions.{{ question._source.question.replace(" ","\_") }}"  ng-true-value="1" ng-false-value="0">{{ question._source.question }}
                         </label>
                         {% endif %}
                         {% endfor %}
@@ -47,8 +47,8 @@
         
         <br>
         <button ng-click="submitForm()" class="btn btn-danger btn-lg">Send Away!</button>
-        
     </form>
+    {{ formData }}
 </div>
 
 <script>

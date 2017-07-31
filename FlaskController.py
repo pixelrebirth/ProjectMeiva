@@ -75,7 +75,7 @@ class RankFilerNew(Resource):
         return ack
 
 class GetQuestions (Resource):
-    def post(self):
+    def get(self):
         questions = es.search(index='rankfiler_question_index', body={
             "from" : 0, "size" : 100,
             'query': {
@@ -84,27 +84,8 @@ class GetQuestions (Resource):
         })
         return questions['hits']['hits']
 
-def getQuestion (category):
-    question = es.search(index='rankfiler_question_index', body={
-        "from" : 0, "size" : 100,
-        'query': {
-            "query_string" : {
-                "default_field" : "category",
-                "query" : category.replace(" "," AND ")
-            }
-        }
-    })
-    return question['hits']['hits']
-
-class GetQuestionsByCategory (Resource):
-    def post(self):
-        json = request.json
-        category = json['category']
-        print(json)
-
-        return getQuestion(category)
 class GetCategories (Resource):
-    def post(self):
+    def get(self):
         
         questions = es.search(index='rankfiler_question_index', body={
         "from" : 0, "size" : 100,
@@ -124,7 +105,6 @@ api.add_resource(TimeKeeperNew, '/meiva/api/timekeeper/new')
 api.add_resource(RankFilerNew, '/meiva/api/rankfiler/new')
 api.add_resource(GetCategories, '/meiva/api/rankfiler/get/categories')
 api.add_resource(GetQuestions, '/meiva/api/rankfiler/get/questions')
-api.add_resource(GetQuestionsByCategory, '/meiva/api/rankfiler/get/questionByCategory')
 
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0',debug=True)
+    app.run(host= '0.0.0.0',debug=True,threaded=True)
