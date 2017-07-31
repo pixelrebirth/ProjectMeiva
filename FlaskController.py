@@ -84,22 +84,25 @@ class GetQuestions (Resource):
         })
         return questions['hits']['hits']
 
+def getQuestion (category):
+    question = es.search(index='rankfiler_question_index', body={
+        "from" : 0, "size" : 100,
+        'query': {
+            "query_string" : {
+                "default_field" : "category",
+                "query" : category.replace(" "," AND ")
+            }
+        }
+    })
+    return question['hits']['hits']
+
 class GetQuestionsByCategory (Resource):
     def post(self):
         json = request.json
         category = json['category']
         print(json)
 
-        question = es.search(index='rankfiler_question_index', body={
-            "from" : 0, "size" : 100,
-            'query': {
-                "query_string" : {
-                    "default_field" : "category",
-                    "query" : category.replace(" "," AND ")
-                }
-            }
-        })
-        return question['hits']['hits']
+        return getQuestion(category)
 class GetCategories (Resource):
     def post(self):
         

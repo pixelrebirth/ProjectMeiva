@@ -31,24 +31,43 @@
         
         <!-- MULTIPLE CHECKBOXES -->
         <div class="form-group">
-            {% for category in categories %}
-                <label>{{category.name}}</label>
-                <div class="form-group">
-                        {% for question in categories %}
-                        {% if category.name == question.name %}
-                        <label class="checkbox">
-                            <input type="checkbox" ng-model="formData.questions.{{ question.stuff }}"  ng-true-value="1" ng-false-value="0">{{ question.stuff }}
-                        </label>
-                        {% endif %}
-                        {% endfor %}
-                </div>
-            {% endfor %}
+            <label>Awesome Home</label>
+            <div class="form-group">
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="formData.questions.Home_cleanRoom"  ng-true-value="1" ng-false-value="0"> Clean a room entirely
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="formData.questions.Home_sortGiveaways"  ng-true-value="1" ng-false-value="0"> Sort out giveaways
+                </label>
+                <label class="checkbox">                
+                    <input type="checkbox" ng-model="formData.questions.Home_organizeArea"  ng-true-value="1" ng-false-value="0"> Organize an area
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="formData.questions.Home_doChores"  ng-true-value="1" ng-false-value="0"> Do your chores
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="formData.questions.Home_fixBroken"  ng-true-value="1" ng-false-value="0"> Fix something broken
+                </label>
+            </div>
         </div>
         
         <br>
         <button ng-click="submitForm()" class="btn btn-danger btn-lg">Send Away!</button>
         
     </form>
+    
+    <!-- SHOW OFF OUR FORMDATA OBJECT -->
+    <h2>Sample Form Object</h2>
+    <pre>
+        {{ formData }}<br>
+        ------------<br>
+        Questions: {{ questions }} <br>
+        Result: {{ result }} <br>
+        Error: {{ error }} <br>
+        Output: {{ categories }} <br>
+        ------------<br>
+    </pre>
+    
 </div>
 
 <script>
