@@ -2,8 +2,9 @@ import time
 import os
 
 from elasticsearch import Elasticsearch
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from flask_restful import Resource, Api
+from werkzeug.datastructures import ImmutableMultiDict
 from app import app
 
 esserver = ['192.168.1.222:9200']
@@ -74,6 +75,26 @@ class RankFilerNew(Resource):
         ack = es.index(index='meiva_index', doc_type='post', id=uid ,body=data)
         return ack
 
+class RankFilerForm(Resource):
+    def post(self):
+        form_multidict = request.form
+        seperator = ':'
+        
+        points = len(form_multidict.getlist('answerchecked'))
+        print(points)
+        print(form_multidict.getlist('answerchecked'))
+       
+        answered = form_multidict.getlist('answerchecked')
+        data = {
+            "Type": "rankfiler",
+            "UserId":form_multidict.getlist('name')[0],
+            "PointsEarned": points,
+            "Answers": seperator.join(answered)
+        }
+        uid = GetUniqueTimeStamp()
+        ack = es.index(index='meiva_index', doc_type='post', id=uid ,body=data)
+        return ack
+
 class GetQuestions (Resource):
     def get(self):
         questions = es.search(index='rankfiler_question_index', body={
@@ -103,6 +124,7 @@ class GetCategories (Resource):
 
 api.add_resource(TimeKeeperNew, '/meiva/api/timekeeper/new')
 api.add_resource(RankFilerNew, '/meiva/api/rankfiler/new')
+api.add_resource(RankFilerForm, '/meiva/api/rankfiler/form/new')
 api.add_resource(GetCategories, '/meiva/api/rankfiler/get/categories')
 api.add_resource(GetQuestions, '/meiva/api/rankfiler/get/questions')
 

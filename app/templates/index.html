@@ -9,24 +9,19 @@
         body         { padding-top:50px; }
         form, pre    { margin-bottom:50px; }
     </style>
-
-    <!-- JS -->
-    <!-- load up angular and our custom script -->
-    <script src="http://code.angularjs.org/1.2.13/angular.js"></script>
 </head>
 
-<!-- apply our angular app and controller -->
-<body ng-app="formApp" ng-controller="formController">
+<body>
 <div class="col-xs-12 col-sm-10 col-sm-offset-1">
 
-    <h2>Angular Checkboxes and Radio Buttons</h2>
+    <h2>Project Meiva</h2>
 
-    <form>
+    <form action="/meiva/api/rankfiler/form/new" method="post">
     
         <!-- NAME INPUT -->
         <div class="form-group">
             <label>UserName</label>
-            <input type="text" class="form-control" name="name" ng-model="formData.name">
+            <input type="text" class="form-control" name="name">
         </div>
         
         <!-- MULTIPLE CHECKBOXES -->
@@ -37,7 +32,7 @@
                         {% for question in questions %}
                         {% if category == question._source.category %}
                         <label class="checkbox">
-                            <input type="checkbox" ng-model="formData.questions.{{ question._source.question.replace(" ","\_") }}"  ng-true-value="1" ng-false-value="0">{{ question._source.question }}
+                            <input type="checkbox" name="answerchecked" value={{question._source.question.replace(" ","_")}}>{{ question._source.question }}
                         </label>
                         {% endif %}
                         {% endfor %}
@@ -46,39 +41,8 @@
         </div>
         
         <br>
-        <button ng-click="submitForm()" class="btn btn-danger btn-lg">Send Away!</button>
+        <button class="btn btn-danger btn-lg">Send Away!</button>
     </form>
-    {{ formData }}
 </div>
-
-<script>
-    var formApp = angular.module('formApp', [])
-
-    .controller('formController', function($scope, $http) {
-        $scope.submitForm = function () {
-            var requestContent = {}
-
-            requestContent['userid'] = $scope.formData['name']
-            requestContent['ranktype'] = "test"
-            requestContent['answerchecked'] = $scope.formData['questions']
-
-            $http({
-                method: 'POST',
-                url: '/meiva/api/rankfiler/new',
-                data: requestContent,
-                header: {
-                    "Content-Type": "application/json"
-                }
-            }).then(
-            function (success) {
-                $scope.result = success.data
-            },
-            function (error) {
-                $scope.error = error.data.message
-            })
-        }
-        $scope.formData = {}
-    });
-</script>
 </body>
 </html>
