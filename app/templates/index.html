@@ -20,28 +20,44 @@
     
         <!-- NAME INPUT -->
         <div class="form-group">
+            <h3>Rankfiler</h3>
             <label>UserName</label>
-            <input type="text" class="form-control" name="name">
+            <input type="text" class="form-control" maxlength=20 name="name" value="Kelcey">
+            <hr>
         </div>
         
         <!-- MULTIPLE CHECKBOXES -->
         <div class="form-group">
             {% for category in categories %}
-                <label>{{category}}</label>
+                <label><u><i><h4>{{category}}</i></u></h4></label>
                 <div class="form-group">
                         {% for question in questions %}
                         {% if category == question._source.category %}
                         <label class="checkbox">
-                            <input type="checkbox" name="answerchecked" value={{question._source.question.replace(" ","_")}}>{{ question._source.question }}
+                            <input type="checkbox" name="answerchecked" value={{question._source.question.replace(" ","_")}}><h5>{{ question._source.question }}</h5>
                         </label>
                         {% endif %}
                         {% endfor %}
                 </div>
             {% endfor %}
         </div>
-        
-        <br>
-        <button class="btn btn-danger btn-lg">Send Away!</button>
+        <button class="btn btn-danger btn-lg">Send Data!</button>
+        <hr>
+    </form>
+    <form action="/meiva/api/timekeeper/form/new" method="post">
+            <div class="form-group">
+            <h3>Rankfiler</h3>
+            <label>UserName</label>
+            <input type="text" class="form-control" maxlength=20 name="name" value="Kelcey">
+            <br>
+            <select name="TimeSpent">
+                <option value="None">None</option>
+                {% for time_cat in time_categories %}
+                <option value="{{time_cat}}">{{time_cat.split(":")[0]}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-danger btn-lg">Send Data!</button>
     </form>
 </div>
 </body>

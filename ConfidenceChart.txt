@@ -159,10 +159,7 @@ for category in content:
     })
     id += 1
 
-
-Struggle Switch Off?",
-    },
-TimeKeeper Categories",
+time_categories = [
             "Positive_Talk:1",
             "Negative_Talk:-1",
             "Time_Killing:0",
@@ -172,4 +169,10 @@ TimeKeeper Categories",
             "Gaming:0",
             "Learning:1",
             "Anxious:0",
-    },
+]
+
+for category in time_categories:
+    es.index(index='timekeeper_question_index', doc_type='post', id=id, body={
+      'category': category
+    })
+    id += 1

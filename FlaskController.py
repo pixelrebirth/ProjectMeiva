@@ -15,66 +15,6 @@ api = Api(app)
 def GetUniqueTimeStamp ():
     return int(time.time() * 10000000000)
 
-def GetPointsByCategory(category):
-    case = {
-        "Coding": 1,
-        "Sports Talk": 0,
-        "Discussion": 1,
-        "Complaining": 0,
-        "Pacing": 0,
-        "Chores": 1
-    }
-    try:
-        if case[category] in (0,1):
-            return case[category]
-        else:
-            return 0
-    except:
-        return 0
-
-class TimeKeeperNew(Resource):
-    def post(self):
-        json = request.json
-        print(json)
-        
-        category =json['TimeCategory']
-        data = {
-            "UserId":json['userid'],
-            "TimeCategory": category,
-            "PointsEarned": GetPointsByCategory(category),
-            "Type": "timekeeper"
-        }
-        uid = GetUniqueTimeStamp()
-        ack = es.index(index='meiva_index', doc_type='post', id=uid ,body=data)
-
-        return ack
-
-class RankFilerNew(Resource):
-    def post(self):
-        json = request.json
-        print(json)
-
-        points = 0
-        answered = []
-        checked = json['answerchecked']
-        keys_in_json = list(checked.keys())
-        for key in keys_in_json:
-            points += int(checked[key])
-            if points == 1:
-                answered += key
-
-        seperator = ':'
-        data = {
-            "Type": "rankfiler",
-            "UserId":json['userid'],
-            "PointsEarned": points,
-            "RankType":json['ranktype'],
-            "Answers": seperator.join(answered)
-        }
-        uid = GetUniqueTimeStamp()
-        ack = es.index(index='meiva_index', doc_type='post', id=uid ,body=data)
-        return ack
-
 class RankFilerForm(Resource):
     def post(self):
         form_multidict = request.form
@@ -92,7 +32,21 @@ class RankFilerForm(Resource):
             "Answers": seperator.join(answered)
         }
         uid = GetUniqueTimeStamp()
-        ack = es.index(index='meiva_index', doc_type='post', id=uid ,body=data)
+        ack = es.index(index='rankfiler_index', doc_type='post', id=uid ,body=data)
+        return ack
+
+class TimeKeeperForm(Resource):
+    def post(self):
+        form_multidict = request.form
+        answer = form_multidict.getlist('TimeSpent')[0]
+        data = {
+            "Type": "timekeeper",
+            "UserId":form_multidict.getlist('name')[0],
+            "PointsEarned": answer.split(":")[1],
+            "Answer": answer.split(":")[0]
+        }
+        uid = GetUniqueTimeStamp()
+        ack = es.index(index='timekeeper_index', doc_type='post', id=uid ,body=data)
         return ack
 
 class GetQuestions (Resource):
@@ -122,11 +76,28 @@ class GetCategories (Resource):
         listSet.sort()
         return listSet
 
-api.add_resource(TimeKeeperNew, '/meiva/api/timekeeper/new')
-api.add_resource(RankFilerNew, '/meiva/api/rankfiler/new')
+class GetTimeCategories (Resource):
+    def get(self):
+        questions = es.search(index='timekeeper_question_index', body={
+        "from" : 0, "size" : 100,
+        'query': {
+            'match_all':{}
+        }
+        })
+
+        allcategories = []
+        for category in questions['hits']['hits']:
+            allcategories += {(category['_source']['category'])}
+        listSet = list(set(allcategories))
+        listSet.sort()
+        return listSet
+
 api.add_resource(RankFilerForm, '/meiva/api/rankfiler/form/new')
 api.add_resource(GetCategories, '/meiva/api/rankfiler/get/categories')
 api.add_resource(GetQuestions, '/meiva/api/rankfiler/get/questions')
+
+api.add_resource(GetTimeCategories,'/meiva/api/timekeeper/get/categories')
+api.add_resource(TimeKeeperForm, '/meiva/api/timekeeper/form/new')
 
 if __name__ == '__main__':
     app.run(host= '0.0.0.0',debug=True,threaded=True)
