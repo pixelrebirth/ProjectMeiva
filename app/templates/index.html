@@ -55,7 +55,9 @@
                 {% for time_cat in time_categories %}
                 <option value="{{time_cat}}">{{time_cat.split(":")[0]}}</option>
                 {% endfor %}
-            </select>
+            </select><br>
+            <label>Comment</label>
+            <input type="text" class="form-control" name="comment">
         </div>
         <button class="btn btn-danger btn-lg">Send Data!</button>
     </form>

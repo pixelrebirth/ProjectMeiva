@@ -43,7 +43,8 @@ class TimeKeeperForm(Resource):
             "Type": "timekeeper",
             "UserId":form_multidict.getlist('name')[0],
             "PointsEarned": answer.split(":")[1],
-            "Answer": answer.split(":")[0]
+            "Answer": answer.split(":")[0],
+            "Comment": form_multidict.getlist('comment')[0]
         }
         uid = GetUniqueTimeStamp()
         ack = es.index(index='timekeeper_index', doc_type='post', id=uid ,body=data)
