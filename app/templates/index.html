@@ -32,11 +32,11 @@
                 <label><u><i><h4>{{category}}</i></u></h4></label>
                 <div class="form-group">
                         {% for question in questions %}
-                        {% if category == question._source.category %}
-                        <label class="checkbox">
-                            <input type="checkbox" name="answerchecked" value={{question._source.question.replace(" ","_")}}><h5>{{ question._source.question }}</h5>
-                        </label>
-                        {% endif %}
+                            {% if category == question._source.category %}
+                            <label class="checkbox">
+                                <input type="checkbox" name="answerchecked" value={{question._source.question.replace(" ","_")}}><h5>{{ question._source.question }}</h5>
+                            </label>
+                            {% endif %}
                         {% endfor %}
                 </div>
             {% endfor %}
@@ -55,7 +55,7 @@
                 {% for time_cat in time_categories %}
                 <option value="{{time_cat}}">{{time_cat.split(":")[0]}}</option>
                 {% endfor %}
-            </select><br>
+            </select><br><br>
             <label>Comment</label>
             <input type="text" class="form-control" name="comment">
         </div>

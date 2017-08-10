@@ -15,6 +15,21 @@ api = Api(app)
 def GetUniqueTimeStamp ():
     return int(time.time() * 10000000000)
 
+def GetEntriesByTime (indexname, timeframe_minutes):
+    currenttime = GetUniqueTimeStamp()
+    previoustime = currenttime - (timeframe_minutes * 60 * 10000000000)
+    result = es.search(index=indexname, body={
+        "query": {
+            "range" : {
+                "EpochTime" : {
+                    "gte" : previoustime,
+                    "lte" : currenttime
+                }
+            }
+        }
+    })
+    return result
+
 class RankFilerForm(Resource):
     def post(self):
         form_multidict = request.form
@@ -25,13 +40,14 @@ class RankFilerForm(Resource):
         print(form_multidict.getlist('answerchecked'))
        
         answered = form_multidict.getlist('answerchecked')
+        uid = GetUniqueTimeStamp()
         data = {
             "Type": "rankfiler",
             "UserId":form_multidict.getlist('name')[0],
             "PointsEarned": points,
-            "Answers": seperator.join(answered)
+            "Answers": seperator.join(answered),
+            "EpochTime": str(uid)
         }
-        uid = GetUniqueTimeStamp()
         ack = es.index(index='rankfiler_index', doc_type='post', id=uid ,body=data)
         return ack
 
@@ -39,14 +55,15 @@ class TimeKeeperForm(Resource):
     def post(self):
         form_multidict = request.form
         answer = form_multidict.getlist('TimeSpent')[0]
+        uid = GetUniqueTimeStamp()
         data = {
             "Type": "timekeeper",
             "UserId":form_multidict.getlist('name')[0],
             "PointsEarned": answer.split(":")[1],
             "Answer": answer.split(":")[0],
-            "Comment": form_multidict.getlist('comment')[0]
+            "Comment": form_multidict.getlist('comment')[0],
+            "EpochTime": str(uid)
         }
-        uid = GetUniqueTimeStamp()
         ack = es.index(index='timekeeper_index', doc_type='post', id=uid ,body=data)
         return ack
 
