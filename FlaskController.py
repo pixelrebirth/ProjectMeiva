@@ -35,11 +35,12 @@ def GetEntriesByTimeBool (indexname, timeframe_minutes):
 
 class TimeCheck(Resource):
     def post(self):
-        json = request.json()
-        index = json['index']
+        json = request.json
+        print(json)
+        tableindex = json['tableindex']
         timeframe = json['timeframe']
 
-        return GetEntriesByTimeBool(index, timeframe)
+        return GetEntriesByTimeBool(tableindex, timeframe)
 
 class RankFilerForm(Resource):
     def post(self):
