@@ -15,7 +15,7 @@ api = Api(app)
 def GetUniqueTimeStamp ():
     return int(time.time() * 10000000000)
 
-def GetEntriesByTimeBool (indexname, timeframe_minutes):
+def CheckTimeReady (indexname, timeframe_minutes):
     currenttime = GetUniqueTimeStamp()
     previoustime = currenttime - (timeframe_minutes * 60 * 10000000000)
     result = es.search(index=indexname, body={
@@ -28,7 +28,7 @@ def GetEntriesByTimeBool (indexname, timeframe_minutes):
             }
         }
     })
-    if len(result) > 0:
+    if len(result['hits']['hits']) == 0:
         return True
     else:
         return False
@@ -36,11 +36,11 @@ def GetEntriesByTimeBool (indexname, timeframe_minutes):
 class TimeCheck(Resource):
     def post(self):
         json = request.json
-        print(json)
+
         tableindex = json['tableindex']
         timeframe = json['timeframe']
 
-        return GetEntriesByTimeBool(tableindex, timeframe)
+        return CheckTimeReady(tableindex, timeframe)
 
 class RankFilerForm(Resource):
     def post(self):
