@@ -15,7 +15,7 @@ api = Api(app)
 def GetUniqueTimeStamp ():
     return int(time.time() * 10000000000)
 
-def GetEntriesByTime (indexname, timeframe_minutes):
+def GetEntriesByTimeBool (indexname, timeframe_minutes):
     currenttime = GetUniqueTimeStamp()
     previoustime = currenttime - (timeframe_minutes * 60 * 10000000000)
     result = es.search(index=indexname, body={
@@ -28,7 +28,18 @@ def GetEntriesByTime (indexname, timeframe_minutes):
             }
         }
     })
-    return result
+    if len(result) > 0:
+        return True
+    else:
+        return False
+
+class TimeCheck(Resource):
+    def post(self):
+        json = request.json()
+        index = json['index']
+        timeframe = json['timeframe']
+
+        return GetEntriesByTimeBool(index, timeframe)
 
 class RankFilerForm(Resource):
     def post(self):
@@ -116,6 +127,8 @@ api.add_resource(GetQuestions, '/meiva/api/rankfiler/get/questions')
 
 api.add_resource(GetTimeCategories,'/meiva/api/timekeeper/get/categories')
 api.add_resource(TimeKeeperForm, '/meiva/api/timekeeper/form/new')
+
+api.add_resource(TimeCheck, '/meiva/api/generic/timecheck')
 
 if __name__ == '__main__':
     app.run(host= '0.0.0.0',debug=True,threaded=True)
