@@ -169,6 +169,9 @@ time_categories = [
             "Gaming:0",
             "Learning:1",
             "Anxious:0",
+            "Parenting:1",
+            "Frustrated:0",
+            "ChitChat:0"
 ]
 
 for category in time_categories:
