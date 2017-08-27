@@ -1,0 +1,31 @@
+class TimeKeeperNew(Resource):
+    def post(self):
+        json = request.json
+        print(json)
+        
+        category =json['TimeCategory']
+        data = {
+            "UserId":json['userid'],
+            "TimeCategory": category,
+            "PointsEarned": GetPointsByCategory(category),
+            "Type": "timekeeper"
+        }
+        uid = GetUniqueTimeStamp()
+        ack = es.index(index='meiva_index', doc_type='post', id=uid ,body=data)
+
+        return ack
+
+Points: 
+    Earned per checkbox on the daily review, +6 on submission (~70+6 points per sheet)
+    Earned each category appropriately +1, 0, -1, hourly +2
+    Hourly -1 (number of hours since the first record available, purge older to reset time)
+    Record of points sent on daily submission to a new index
+
+
+rankfiler sum
+timekeep sum
+hours since beginning
+on rankfiler submit current data point for points +6
+modify timekeeper hourly submission to +1
+create a function for total calculated amount
+    (timekeeper_sum + rankfiler_sum) - hours_from_start

@@ -1,5 +1,6 @@
 import time
 import os
+import sys
 
 from elasticsearch import Elasticsearch
 from flask import Flask, request, render_template, jsonify
@@ -12,7 +13,7 @@ esserver = ['192.168.1.222:9200']
 es = Elasticsearch(esserver)
 api = Api(app)
 
-def GetUniqueTimeStamp ():
+def GetUniqueTimeStamp () :
     return int(time.time() * 10000000000)
 
 def CheckTimeReady (indexname, timeframe_minutes):
@@ -56,7 +57,7 @@ class RankFilerForm(Resource):
         data = {
             "Type": "rankfiler",
             "UserId":form_multidict.getlist('name')[0],
-            "PointsEarned": points,
+            "PointsEarned": points + 6,
             "Answers": seperator.join(answered),
             "EpochTime": str(uid)
         }
@@ -71,7 +72,7 @@ class TimeKeeperForm(Resource):
         data = {
             "Type": "timekeeper",
             "UserId":form_multidict.getlist('name')[0],
-            "PointsEarned": answer.split(":")[1],
+            "PointsEarned": int(answer.split(":")[1]) + 1,
             "Answer": answer.split(":")[0],
             "Comment": form_multidict.getlist('comment')[0],
             "EpochTime": str(uid)
@@ -122,14 +123,23 @@ class GetTimeCategories (Resource):
         listSet.sort()
         return listSet
 
-api.add_resource(RankFilerForm, '/meiva/api/rankfiler/form/new')
-api.add_resource(GetCategories, '/meiva/api/rankfiler/get/categories')
-api.add_resource(GetQuestions, '/meiva/api/rankfiler/get/questions')
+def main(args=None):
+    api.add_resource(GetQuestions, '/meiva/api/rankfiler/get/questions')
+    
+    api.add_resource(GetCategories, '/meiva/api/rankfiler/get/categories')
+    api.add_resource(RankFilerForm, '/meiva/api/rankfiler/form/new')
 
-api.add_resource(GetTimeCategories,'/meiva/api/timekeeper/get/categories')
-api.add_resource(TimeKeeperForm, '/meiva/api/timekeeper/form/new')
+    api.add_resource(GetTimeCategories,'/meiva/api/timekeeper/get/categories')
+    api.add_resource(TimeKeeperForm, '/meiva/api/timekeeper/form/new')
 
-api.add_resource(TimeCheck, '/meiva/api/generic/timecheck')
+    api.add_resource(TimeCheck, '/meiva/api/generic/timecheck')
 
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0',debug=True,threaded=True)
+    returncode = 1
+    try:
+        main()
+        app.run(host= '0.0.0.0',debug=True,threaded=True)
+        returncode = 0
+    except Exception as errormessage:
+        print('Error: %s' % errormessage, file=sys.stderr)
+    sys.exit(returncode)
