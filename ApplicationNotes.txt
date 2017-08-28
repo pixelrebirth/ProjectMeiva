@@ -29,3 +29,4 @@ on rankfiler submit current data point for points +6
 modify timekeeper hourly submission to +1
 create a function for total calculated amount
     (timekeeper_sum + rankfiler_sum) - hours_from_start
+Post how long ago the most recent was submitted for both entries

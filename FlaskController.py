@@ -123,6 +123,46 @@ class GetTimeCategories (Resource):
         listSet.sort()
         return listSet
 
+class GetTotalPoints (Resource):
+    def get(self):
+        rankfiler = es.search(index='rankfiler_index', body={
+        "from" : 0, "size" : 100,
+        'query': {
+            'match_all':{}
+        }
+        })['hits']['hits']
+
+        timekeeper = (es.search(index='timekeeper_index', body={
+        "from" : 0, "size" : 100,
+        'query': {
+            'match_all':{}
+        }
+        }))['hits']['hits']
+
+        count = int(0)
+        minimum = int(0)
+        currenttime = GetUniqueTimeStamp()
+        current_id = currenttime
+
+        for eachitem in rankfiler:
+            count += eachitem['_source']['PointsEarned']
+            try:
+                current_id = int(eachitem['_source']['EpochTime'])
+            except:
+                current_id
+            if minimum == 0 or minimum > current_id:
+                minimum = current_id
+
+        for eachitem in timekeeper:
+            count += int(eachitem['_source']['PointsEarned'])
+        
+        hours_from_start = int((currenttime - minimum) / 36000000000000)
+        total_score = count - int(hours_from_start/2)
+        if total_score < 0:
+            total_score = 0
+
+        return total_score
+
 def main(args=None):
     api.add_resource(GetQuestions, '/meiva/api/rankfiler/get/questions')
     
@@ -133,6 +173,7 @@ def main(args=None):
     api.add_resource(TimeKeeperForm, '/meiva/api/timekeeper/form/new')
 
     api.add_resource(TimeCheck, '/meiva/api/generic/timecheck')
+    api.add_resource(GetTotalPoints, '/meiva/api/generic/get/points')
 
 if __name__ == '__main__':
     returncode = 1
