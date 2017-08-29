@@ -46,3 +46,16 @@ for category in content:
       category_name: question
     })
     id += 1
+
+RESET POINTS, PURGE RANKFILER_INDEX
+import time
+es.indices.delete(index='rankfiler_index')
+
+uid = (time.time() * 10000000000)
+data = {
+    "Type": "rankfiler",
+    "UserId":"Kelcey",
+    "PointsEarned": 0,
+    "EpochTime": str(uid)
+}
+ack = es.index(index='rankfiler_index', doc_type='post', id=uid ,body=data)

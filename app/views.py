@@ -12,7 +12,7 @@ def index():
     timejson = {'tableindex': 'timekeeper_index','timeframe': 45}
     timekeeper_ready = requests.post('http://127.0.0.1:5000/meiva/api/generic/timecheck',json=timejson)
 
-    rankjson = {'tableindex': 'rankfiler_index','timeframe': 1400}
+    rankjson = {'tableindex': 'rankfiler_index','timeframe': 1320}
     rankfiler_ready = requests.post('http://127.0.0.1:5000/meiva/api/generic/timecheck',json=rankjson)
 
     total_points = requests.get('http://127.0.0.1:5000/meiva/api/generic/get/points')

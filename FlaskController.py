@@ -4,6 +4,7 @@ import sys
 
 from elasticsearch import Elasticsearch
 from flask import Flask, request, render_template, jsonify
+from flask_assets import Environment, Bundle
 from flask_restful import Resource, Api
 from werkzeug.datastructures import ImmutableMultiDict
 from app import app
@@ -12,6 +13,7 @@ esserver = ['192.168.1.222:9200']
 
 es = Elasticsearch(esserver)
 api = Api(app)
+assets = Environment(app)
 
 def GetUniqueTimeStamp () :
     return int(time.time() * 10000000000)
