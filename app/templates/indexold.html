@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- CSS -->
+    <!-- load up bootstrap and add some spacing -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <style>
+        body         { padding-top:50px; }
+        form, pre    { margin-bottom:50px; }
+    </style>
+</head>
+
+<body>
+<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+
+    <h2>Project Meiva</h2>
+    <h3>Karma Score: {{total_points}}</h3>
+    {% if rankfiler_ready == False and timekeeper_ready == False %}
+    <h4>There is nothing to do, you rock for checking though!</h4>
+    {% endif %}
+    {% if rankfiler_ready == False %}
+    <form action="/meiva/api/rankfiler/form/new" method="post">
+    
+        <!-- NAME INPUT -->
+        <div class="form-group">
+            <h3>Rankfiler</h3>
+            <label>UserName</label>
+            <input type="text" class="form-control" maxlength=20 name="name" value="Kelcey">
+            <hr>
+        </div>
+        
+        <!-- MULTIPLE CHECKBOXES -->
+        <div class="form-group">
+            {% for category in categories %}
+                <label><u><i><h4>{{category}}</i></u></h4></label>
+                <div class="form-group">
+                        {% for question in questions %}
+                            {% if category == question._source.category %}
+                            <label class="checkbox">
+                                <input type="checkbox" name="answerchecked" value={{question._source.question.replace(" ","_")}}><h5>{{ question._source.question }}</h5>
+                            </label>
+                            {% endif %}
+                        {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        <button class="btn btn-danger btn-lg">Send Data!</button>
+        <hr>
+    </form>
+    {% endif %}
+
+    {% if timekeeper_ready == True %}
+    <form action="/meiva/api/timekeeper/form/new" method="post">
+            <div class="form-group">
+            <h3>Rankfiler</h3>
+            <label>UserName</label>
+            <input type="text" class="form-control" maxlength=20 name="name" value="Kelcey">
+            <br>
+            <select name="TimeSpent">
+                <option value="None">None</option>
+                {% for time_cat in time_categories %}
+                <option value="{{time_cat}}">{{time_cat.split(":")[0]}}</option>
+                {% endfor %}
+            </select><br><br>
+            <label>Comment</label>
+            <input type="text" class="form-control" name="comment">
+        </div>
+        <button class="btn btn-danger btn-lg">Send Data!</button>
+    </form>
+    {% endif %}
+</div>
+</body>
+</html>

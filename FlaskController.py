@@ -3,7 +3,7 @@ import os
 import sys
 
 from elasticsearch import Elasticsearch
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, redirect
 from flask_assets import Environment, Bundle
 from flask_restful import Resource, Api
 from werkzeug.datastructures import ImmutableMultiDict
@@ -58,13 +58,14 @@ class RankFilerForm(Resource):
         uid = GetUniqueTimeStamp()
         data = {
             "Type": "rankfiler",
-            "UserId":form_multidict.getlist('name')[0],
+            "UserId":"Kelcey",
             "PointsEarned": points + 6,
             "Answers": seperator.join(answered),
             "EpochTime": str(uid)
         }
-        ack = es.index(index='rankfiler_index', doc_type='post', id=uid ,body=data)
-        return ack
+        es.index(index='rankfiler_index', doc_type='post', id=uid ,body=data)
+        time.sleep(1)
+        return redirect("/index", code=303)
 
 class TimeKeeperForm(Resource):
     def post(self):
@@ -73,14 +74,15 @@ class TimeKeeperForm(Resource):
         uid = GetUniqueTimeStamp()
         data = {
             "Type": "timekeeper",
-            "UserId":form_multidict.getlist('name')[0],
+            "UserId":"Kelcey",
             "PointsEarned": int(answer.split(":")[1]) + 1,
             "Answer": answer.split(":")[0],
             "Comment": form_multidict.getlist('comment')[0],
             "EpochTime": str(uid)
         }
-        ack = es.index(index='timekeeper_index', doc_type='post', id=uid ,body=data)
-        return ack
+        es.index(index='timekeeper_index', doc_type='post', id=uid ,body=data)
+        time.sleep(1)
+        return redirect("/index", code=303)
 
 class GetQuestions (Resource):
     def get(self):

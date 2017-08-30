@@ -1,74 +1,155 @@
 <!DOCTYPE html>
-<html>
-<head>
+<html lang="en">
 
-    <!-- CSS -->
-    <!-- load up bootstrap and add some spacing -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <style>
-        body         { padding-top:50px; }
-        form, pre    { margin-bottom:50px; }
-    </style>
-</head>
+    <head>
 
-<body>
-<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Bootstrap Long Multi-Step Form</title>
 
-    <h2>Project Meiva</h2>
-    <h3>Karma Score: {{total_points}}</h3>
-    {% if rankfiler_ready == False and timekeeper_ready == False %}
-    <h4>There is nothing to do, you rock for checking though!</h4>
-    {% endif %}
-    {% if rankfiler_ready == True %}
-    <form action="/meiva/api/rankfiler/form/new" method="post">
-    
-        <!-- NAME INPUT -->
-        <div class="form-group">
-            <h3>Rankfiler</h3>
-            <label>UserName</label>
-            <input type="text" class="form-control" maxlength=20 name="name" value="Kelcey">
-            <hr>
-        </div>
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,700">
+        <link rel="stylesheet" href="static/assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="static/assets/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="static/assets/css/form-elements.css">
+        <link rel="stylesheet" href="static/assets/css/style.css">
+        <link rel="stylesheet" href="static/assets/css/media-queries.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicon and touch icons -->
+        <link rel="shortcut icon" href="static/assets/ico/favicon.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="static/assets/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="static/assets/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="static/assets/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="static/assets/ico/apple-touch-icon-57-precomposed.png">
+
+    </head>
+
+    <body>
+		
+		<!-- Top menu -->
         
-        <!-- MULTIPLE CHECKBOXES -->
-        <div class="form-group">
-            {% for category in categories %}
-                <label><u><i><h4>{{category}}</i></u></h4></label>
-                <div class="form-group">
-                        {% for question in questions %}
-                            {% if category == question._source.category %}
-                            <label class="checkbox">
-                                <input type="checkbox" name="answerchecked" value={{question._source.question.replace(" ","_")}}><h5>{{ question._source.question }}</h5>
-                            </label>
-                            {% endif %}
-                        {% endfor %}
-                </div>
-            {% endfor %}
-        </div>
-        <button class="btn btn-danger btn-lg">Send Data!</button>
-        <hr>
-    </form>
-    {% endif %}
+        <!-- Description -->
+		{% if rankfiler_ready == False and timekeeper_ready == False %}
+		<div class="description-container">
+	        <div class="container">
+	        	<div class="row">
+	                <div class="col-sm-12 description-title">
+						<h2>Project Meiva</h2>
+						<h1>{{total_points}}</h1>
+						<div class="divider-1">. . . . . . . . . . . . . . . .</div>
+						<h4>There is nothing to do, you rock for checking though!</h4>
+	                </div>
+	            </div>
+			</div>
+		</div>
+		{% endif %}
+		
+		<!-- Multi Step Form -->
+		{% if rankfiler_ready == True %}
+		<div class="msf-container">
+	        <div class="container">
+	            <div class="row">
+	                <div class="col-sm-12 msf-form">
+	                    
+						<h3>Rankfiler</h3>
+	                    <form role="form" action="/meiva/api/rankfiler/form/new" method="post" class="form-inline">
+							{% for category in categories %}
+	                    	<fieldset>
+								<hr>
+								<!-- {% if categories[0] == category %}
+								<div class="form-group">
+									<label>UserName</label>
+									<input type="text" class="form-control" maxlength=20 name="name" value="Kelcey">
+									<hr>
+								</div>
+								{% endif %} -->
+								<br>
+								<label><u><i><h3>{{category}}</i></u></h3></label><br><br>
+	            				<div class="form-group">
+									{% for question in questions %}
+										{% if category == question._source.category %}
+										<label class="checkbox-inline">
+												<input type="checkbox" name="answerchecked" value={{question._source.question.replace(" ","_")}}> <font size="4">{{ question._source.question }}</font>
+										</label><br>
+										{% endif %}
+									{% endfor %}
+									</div>
+									<br><br>
+								{% if categories[-1] == category %}
+								<button class="btn btn-danger btn-lg">Send Data!</button>
+								{% else %}
+	            				<button type="button" class="btn btn-next">Next <i class="fa fa-angle-right"></i></button>
+								{% endif %}
+	            			</fieldset>
+							{% endfor %}
+	                    	
+	                    </form>
+	                    
+	                </div>
+	            </div>
+			</div>
+		</div>
+		{% endif %}
 
-    {% if timekeeper_ready == True %}
-    <form action="/meiva/api/timekeeper/form/new" method="post">
-            <div class="form-group">
-            <h3>Rankfiler</h3>
-            <label>UserName</label>
-            <input type="text" class="form-control" maxlength=20 name="name" value="Kelcey">
-            <br>
-            <select name="TimeSpent">
-                <option value="None">None</option>
-                {% for time_cat in time_categories %}
-                <option value="{{time_cat}}">{{time_cat.split(":")[0]}}</option>
-                {% endfor %}
-            </select><br><br>
-            <label>Comment</label>
-            <input type="text" class="form-control" name="comment">
-        </div>
-        <button class="btn btn-danger btn-lg">Send Data!</button>
-    </form>
-    {% endif %}
-</div>
-</body>
+		{% if timekeeper_ready == True and rankfiler_ready == False %}
+		<div class="msf-container">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-12 msf-form">
+							<h3>TimeKeeper</h3>
+							<form role="form" action="/meiva/api/timekeeper/form/new" method="post" class="form-inline">
+								<fieldset>
+									<hr>
+									<!-- <div class="form-group">
+										<label>UserName</label>
+										<input type="text" class="form-control" maxlength=20 name="name" value="Kelcey">
+										<hr>
+									</div> -->
+									<div class="form-group">
+										<label for="comment">Summarize the last hour</label><br>
+											<select class="form-control" name="TimeSpent">
+												<option value="None:-1">None</option>
+											{% for time_cat in time_categories %}
+											<option value="{{time_cat}}">{{time_cat.split(":")[0]}}</option>
+											{% endfor %}
+											<option value="MissingCategory:0">Missing Category</option>
+										</select>
+									</div>
+									<br>
+									<div class="form-group">
+										<label for="comment">What happened in the last hour?</label><br>
+										<input type="text" name="comment" class="form-control" name="comment">
+									</div>
+									<br>
+									<button class="btn btn-danger btn-lg">Send Data!</button>
+								</fieldset>
+		</form>
+			        </div>
+	            </div>
+			</div>
+		</div>
+		{% endif %}
+		
+		
+
+        <!-- Javascript -->
+        <script src="static/assets/js/jquery-1.11.1.min.js"></script>
+        <script src="static/assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="static/assets/js/jquery.backstretch.min.js"></script>
+        <script src="static/assets/js/scripts.js"></script>
+        
+        <!--[if lt IE 10]>
+            <script src="static/assets/js/placeholder.js"></script>
+        <![endif]-->
+
+    </body>
+
 </html>
