@@ -9,10 +9,10 @@ def index():
     categories = requests.get('http://127.0.0.1:5000/meiva/api/rankfiler/get/categories')
     time_categories = requests.get('http://127.0.0.1:5000/meiva/api/timekeeper/get/categories')
 
-    timejson = {'tableindex': 'timekeeper_index','timeframe': 30}
+    timejson = {'tableindex': 'timekeeper_index','timeframe': 45}
     timekeeper_ready = requests.post('http://127.0.0.1:5000/meiva/api/generic/timecheck',json=timejson)
 
-    rankjson = {'tableindex': 'rankfiler_index','timeframe': 1320}
+    rankjson = {'tableindex': 'rankfiler_index','timeframe': 1410}
     rankfiler_ready = requests.post('http://127.0.0.1:5000/meiva/api/generic/timecheck',json=rankjson)
 
     total_points = requests.get('http://127.0.0.1:5000/meiva/api/generic/get/points')

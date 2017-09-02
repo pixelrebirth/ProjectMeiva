@@ -6,7 +6,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Bootstrap Long Multi-Step Form</title>
+        <title>Project Meiva</title>
 
         <!-- CSS -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,700">
@@ -53,57 +53,57 @@
 		{% endif %}
 		
 		<!-- Multi Step Form -->
-		{% if rankfiler_ready == True %}
+		{% if timekeeper_ready == False and rankfiler_ready == True %}
 		<div class="msf-container">
-	        <div class="container">
-	            <div class="row">
-	                <div class="col-sm-12 msf-form">
-	                    
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-12 msf-form">
+						
 						<h3>Rankfiler</h3>
 	                    <form role="form" action="/meiva/api/rankfiler/form/new" method="post" class="form-inline">
 							{% for category in categories %}
 	                    	<fieldset>
 								<hr>
 								<!-- {% if categories[0] == category %}
-								<div class="form-group">
-									<label>UserName</label>
-									<input type="text" class="form-control" maxlength=20 name="name" value="Kelcey">
-									<hr>
-								</div>
-								{% endif %} -->
-								<br>
-								<label><u><i><h3>{{category}}</i></u></h3></label><br><br>
-	            				<div class="form-group">
-									{% for question in questions %}
+									<div class="form-group">
+										<label>UserName</label>
+										<input type="text" class="form-control" maxlength=20 name="name" value="Kelcey">
+										<hr>
+									</div>
+									{% endif %} -->
+									<br>
+									<label><u><i><h3>{{category}}</i></u></h3></label><br><br>
+									<div class="form-group">
+										{% for question in questions %}
 										{% if category == question._source.category %}
 										<label class="checkbox-inline">
-												<input type="checkbox" name="answerchecked" value={{question._source.question.replace(" ","_")}}> <font size="4">{{ question._source.question }}</font>
+											<input type="checkbox" name="answerchecked" value={{question._source.question.replace(" ","_")}}> <font size="4">{{ question._source.question }}</font>
 										</label><br>
 										{% endif %}
-									{% endfor %}
+										{% endfor %}
 									</div>
 									<br><br>
-								{% if categories[-1] == category %}
-								<button class="btn btn-danger btn-lg">Send Data!</button>
-								{% else %}
-	            				<button type="button" class="btn btn-next">Next <i class="fa fa-angle-right"></i></button>
-								{% endif %}
-	            			</fieldset>
-							{% endfor %}
-	                    	
-	                    </form>
-	                    
-	                </div>
-	            </div>
+									{% if categories[-1] == category %}
+									<button class="btn btn-danger btn-lg">Send Data!</button>
+									{% else %}
+									<button type="button" class="btn btn-next">Next <i class="fa fa-angle-right"></i></button>
+									{% endif %}
+								</fieldset>
+								{% endfor %}
+								
+							</form>
+							
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
-		{% endif %}
-
-		{% if timekeeper_ready == True and rankfiler_ready == False %}
-		<div class="msf-container">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-12 msf-form">
+			{% endif %}
+			
+			{% if timekeeper_ready == True %}
+			<div class="msf-container">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-12 msf-form">
 							<h3>TimeKeeper</h3>
 							<form role="form" action="/meiva/api/timekeeper/form/new" method="post" class="form-inline">
 								<fieldset>
@@ -115,8 +115,8 @@
 									</div> -->
 									<div class="form-group">
 										<label for="comment">Summarize the last hour</label><br>
-											<select class="form-control" name="TimeSpent">
-												<option value="None:-1">None</option>
+										<select class="form-control" name="TimeSpent">
+											<option value="None:-1">None</option>
 											{% for time_cat in time_categories %}
 											<option value="{{time_cat}}">{{time_cat.split(":")[0]}}</option>
 											{% endfor %}
