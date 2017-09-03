@@ -171,7 +171,13 @@ time_categories = [
             "Anxious:0",
             "Parenting:1",
             "Frustrated:0",
-            "ChitChat:0"
+            "ChitChat:0",
+            "Commuting:0",
+            "Engineering:1",
+            "Meeting:0",
+            "Documenting:1",
+            "Researching:0",
+            "Quality_Time:1"
 ]
 
 for category in time_categories:

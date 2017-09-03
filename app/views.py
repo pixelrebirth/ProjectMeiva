@@ -26,3 +26,20 @@ def index():
                            timekeeper_ready = timekeeper_ready.json(),
                            total_points = total_points.json()
     )
+
+
+@app.route('/indexChart')
+def indexChart(chartID = 'chart_ID', chart_type = 'area', chart_height = 350):
+	chart = {"renderTo": chartID, "pie": chart_type, "height": chart_height}
+	series = [{"name": 'Label1', "data": [1,7,3]}, {"name": 'Label2', "data": [4, 2, 6]}, {"name": 'Label3', "data": [1, 4, 10]}]
+	title = {"text": 'My Title'}
+	xAxis = {"categories": ['xAxis Data1', 'xAxis Data2', 'xAxis Data3']}
+	yAxis = {"title": {"text": 'yAxis Label'}}
+	return render_template('indexChart.html', 
+                            chartID=chartID,
+                            chart=chart,
+                            series=series,
+                            title=title,
+                            xAxis=xAxis,
+                            yAxis=yAxis
+    )
