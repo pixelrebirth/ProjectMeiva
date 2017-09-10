@@ -2,7 +2,9 @@
 <html lang="en">
 
     <head>
-
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<meta name="author" content="">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +15,8 @@
         <link rel="stylesheet" href="static/assets/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="static/assets/font-awesome/css/font-awesome.min.css">
 		<link rel="stylesheet" href="static/assets/css/form-elements.css">
-        <link rel="stylesheet" href="static/assets/css/style.css">
+		<link rel="stylesheet" href="static/assets/css/style.css">
+		<link rel="stylesheet" href="static/assets/css/main.css">
         <link rel="stylesheet" href="static/assets/css/media-queries.css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -33,11 +36,14 @@
     </head>
 
     <body>
-		
 		<!-- Top menu -->
         
         <!-- Description -->
 		{% if rankfiler_ready == False and timekeeper_ready == False %}
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<!-- <script src="https://code.highcharts.com/highcharts-3d.js"></script> -->
+		<script src="static/assets/js/main.js"></script>
 		<div class="description-container">
 	        <div class="container">
 	        	<div class="row">
@@ -46,14 +52,26 @@
 						<h1>{{total_points}}</h1>
 						<div class="divider-1">. . . . . . . . . . . . . . . .</div>
 						<h4>There is nothing to do, you rock for checking though!</h4>
-	                </div>
-	            </div>
+					</div>
+				</div>
+				<div class="row">
+					<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 500px"></div>
+					<script>
+							var chart_id = {{ chartID|safe }}
+							var series = {{ series|safe }}
+							var title = {{ charttitle|safe }}
+							var xAxis = {{ xAxis|safe }}
+							var yAxis = {{ yAxis|safe }}
+							var chart = {{ chart|safe }}
+					</script>
+				</div>
 			</div>
 		</div>
 		{% endif %}
 		
 		<!-- Multi Step Form -->
 		{% if timekeeper_ready == False and rankfiler_ready == True %}
+		<script src="static/assets/js/jquery-1.11.1.min.js"></script>
 		<div class="msf-container">
 			<div class="container">
 				<div class="row">
@@ -100,6 +118,7 @@
 			{% endif %}
 			
 			{% if timekeeper_ready == True %}
+			<script src="static/assets/js/jquery-1.11.1.min.js"></script>
 			<div class="msf-container">
 				<div class="container">
 					<div class="row">
@@ -139,9 +158,8 @@
 		{% endif %}
 		
 		
-
         <!-- Javascript -->
-        <script src="static/assets/js/jquery-1.11.1.min.js"></script>
+
         <script src="static/assets/bootstrap/js/bootstrap.min.js"></script>
         <script src="static/assets/js/jquery.backstretch.min.js"></script>
         <script src="static/assets/js/scripts.js"></script>

@@ -4,7 +4,7 @@ import requests
 
 @app.route('/')
 @app.route('/index')
-def index():
+def index(chartID = 'chart_ID', chart_type = 'area', chart_height = 350):
     questions = requests.get('http://127.0.0.1:5000/meiva/api/rankfiler/get/questions')
     categories = requests.get('http://127.0.0.1:5000/meiva/api/rankfiler/get/categories')
     time_categories = requests.get('http://127.0.0.1:5000/meiva/api/timekeeper/get/categories')
@@ -17,6 +17,12 @@ def index():
 
     total_points = requests.get('http://127.0.0.1:5000/meiva/api/generic/get/points')
 
+    chart = {"renderTo": chartID, "pie": chart_type, "height": chart_height}
+    series = [{"name": 'Label1', "data": [1,7,3]}, {"name": 'Label2', "data": [4, 2, 6]}, {"name": 'Label3', "data": [1, 4, 10]}]
+    charttitle = {"text": 'My Title'}
+    xAxis = {"categories": ['xAxis Data1', 'xAxis Data2', 'xAxis Data3']}
+    yAxis = {"title": {"text": 'yAxis Label'}}
+
     return render_template('index.html',
                            title='Project Meiva',
                            questions = questions.json(),
@@ -24,7 +30,13 @@ def index():
                            time_categories = time_categories.json(),
                            rankfiler_ready = rankfiler_ready.json(),
                            timekeeper_ready = timekeeper_ready.json(),
-                           total_points = total_points.json()
+                           total_points = total_points.json(),
+                           charttitle=charttitle,
+                           chartID=chartID,
+                           chart=chart,
+                           series=series,
+                           xAxis=xAxis,
+                           yAxis=yAxis
     )
 
 
